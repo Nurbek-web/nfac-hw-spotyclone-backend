@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { CreateMusicDto } from './dtos/CreateMusic.dto'
 import MusicService from './music-service'
+import { getAudioDurationInSeconds } from 'get-audio-duration' // Import get-audio-duration
 
 class MusicController {
   private musicService: MusicService
@@ -11,11 +12,22 @@ class MusicController {
 
   createMusic = async (req: Request, res: Response): Promise<void> => {
     try {
-      const CreateMusicDto: CreateMusicDto = req.body
-      const fileUrl = (req as any).file.location
+      const createMusicDto: CreateMusicDto = req.body
+      const file = (req as any).file
+      const fileUrl = file.location
 
-      const music = await this.musicService.createMusic(CreateMusicDto, fileUrl)
+      const music = await this.musicService.createMusic(createMusicDto, fileUrl)
       res.status(201).json(music)
+    } catch (error: any) {
+      res.status(500).send({ error: error.message })
+    }
+  }
+
+  deleteMusicById = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { id } = req.params
+      await this.musicService.deleteMusicById(id)
+      res.status(204).send()
     } catch (error: any) {
       res.status(500).send({ error: error.message })
     }
@@ -23,8 +35,8 @@ class MusicController {
 
   getMusics = async (req: Request, res: Response): Promise<void> => {
     try {
-      const events = await this.musicService.getMusics()
-      res.status(200).json(events)
+      const musics = await this.musicService.getMusics()
+      res.status(200).json(musics)
     } catch (error: any) {
       res.status(500).send({ error: error.message })
     }
@@ -33,12 +45,12 @@ class MusicController {
   getMusicByID = async (req: Request, res: Response): Promise<void> => {
     try {
       const { id } = req.params
-      const event = await this.musicService.getMusicByID(id)
-      if (!event) {
-        res.status(404).json({ message: 'Event not found' })
+      const music = await this.musicService.getMusicByID(id)
+      if (!music) {
+        res.status(404).json({ message: 'Music not found' })
         return
       }
-      res.status(200).json(event)
+      res.status(200).json(music)
     } catch (error: any) {
       res.status(500).send({ error: error.message })
     }

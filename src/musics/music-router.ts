@@ -12,6 +12,7 @@ const musicController = new MusicController(musicService)
 musicRouter.get('/musics/', musicController.getMusics)
 musicRouter.post('/musics/', musicController.createMusic)
 musicRouter.get('/musics/:id', musicController.getMusicByID)
+musicRouter.delete('/musics/:id/', musicController.deleteMusicById)
 
 musicRouter.post('/upload', upload.single('file'), musicController.createMusic)
 

@@ -8,21 +8,23 @@ class MusicService {
     return await MusicModel.findById(id).exec()
   }
 
-  async getMusics(
-  ): Promise<IMusic[]> {
-    
-    return await MusicModel.find();
+  async getMusics(): Promise<IMusic[]> {
+    return await MusicModel.find()
+  }
+
+  async deleteMusicById(id: string): Promise<void> {
+    await MusicModel.findByIdAndDelete(id)
   }
 
   async createMusic(
-    createEventDto: CreateMusicDto,
+    createMusicDto: CreateMusicDto,
     fileUrl: string
   ): Promise<IMusic> {
-    const { name, artist, date, duration } = createEventDto
+    const { name, artist, duration } = createMusicDto
     const newEvent = new MusicModel({
       name,
       src: fileUrl,
-      date: new Date(date),
+      date: new Date(),
       artist,
       duration
     })
