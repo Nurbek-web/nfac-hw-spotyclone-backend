@@ -9,34 +9,19 @@ class MusicService {
   }
 
   async getMusics(
-    city: string | null,
-    page: number,
-    limit: number,
-    sortBy: string,
-    sortDirection: 'asc' | 'desc'
   ): Promise<IMusic[]> {
-    const skip = (page - 1) * limit
-    const sortOptions: { [key: string]: SortOrder } = {
-      [sortBy]: sortDirection === 'asc' ? 1 : -1
-    }
-
-    const filter: { location?: string } = {}
-    if (city) {
-      filter.location = city
-    }
-
-    return await MusicModel.find(filter)
-      .sort(sortOptions)
-      .skip(skip)
-      .limit(limit)
-      .exec()
+    
+    return await MusicModel.find();
   }
 
-  async createMusic(createEventDto: CreateMusicDto): Promise<IMusic> {
-    const { name, artist, date, src, duration } = createEventDto
+  async createMusic(
+    createEventDto: CreateMusicDto,
+    fileUrl: string
+  ): Promise<IMusic> {
+    const { name, artist, date, duration } = createEventDto
     const newEvent = new MusicModel({
       name,
-      src,
+      src: fileUrl,
       date: new Date(date),
       artist,
       duration

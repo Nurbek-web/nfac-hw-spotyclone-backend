@@ -13,12 +13,6 @@ musicRouter.get('/musics/', musicController.getMusics)
 musicRouter.post('/musics/', musicController.createMusic)
 musicRouter.get('/musics/:id', musicController.getMusicByID)
 
-musicRouter.post('/upload', upload.single('file'), (req: any, res) => {
-  // Ensure the field name here is 'file'
-  if (!req.file) {
-    return res.status(400).json({ error: 'No file uploaded' })
-  }
-  res.status(200).json({ fileUrl: (req.file as any).location })
-})
+musicRouter.post('/upload', upload.single('file'), musicController.createMusic)
 
 export default musicRouter
