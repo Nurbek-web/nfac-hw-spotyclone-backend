@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { CreateMusicDto } from './dtos/CreateMusic.dto'
 import MusicService from './music-service'
-import { getAudioDurationInSeconds } from 'get-audio-duration' // Import get-audio-duration
+import { CreateArtistDto } from './dtos/CreateArtist.dto'
 
 class MusicController {
   private musicService: MusicService
@@ -12,16 +12,32 @@ class MusicController {
 
   createMusic = async (req: Request, res: Response): Promise<void> => {
     try {
-      const createMusicDto: CreateMusicDto = req.body
+      const createArtistDto: CreateArtistDto = req.body
       const file = (req as any).file
       const fileUrl = file.location
 
-      const music = await this.musicService.createMusic(createMusicDto, fileUrl)
+      const music = await this.musicService.createArtist(
+        createArtistDto,
+        fileUrl
+      )
       res.status(201).json(music)
     } catch (error: any) {
       res.status(500).send({ error: error.message })
     }
   }
+
+  // createMusic = async (req: Request, res: Response): Promise<void> => {
+  //   try {
+  //     const createMusicDto: CreateMusicDto = req.body
+  //     const file = (req as any).file
+  //     const fileUrl = file.location
+
+  //     const music = await this.musicService.createMusic(createMusicDto, fileUrl)
+  //     res.status(201).json(music)
+  //   } catch (error: any) {
+  //     res.status(500).send({ error: error.message })
+  //   }
+  // }
 
   deleteMusicById = async (req: Request, res: Response): Promise<void> => {
     try {
