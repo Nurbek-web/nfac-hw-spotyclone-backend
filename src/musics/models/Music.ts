@@ -10,11 +10,12 @@ export interface IMusic extends Document {
 
 const MusicSchema: Schema = new Schema({
   name: { type: String, require: true },
-  artist: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Artist',
-    required: true
-  },
+  // artist: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: 'Artist',
+  //   required: true
+  // },
+  artist: { type: String, require: true },
   date: { type: Date, require: true },
   src: { type: String, require: true },
   duration: { type: String, require: true }
